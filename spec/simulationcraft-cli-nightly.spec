@@ -1,5 +1,5 @@
 %global projectUrl https://github.com/simulationcraft/simc
-%global version %(echo "$(date +%Y-%m-%d)")
+%global version %(echo "$(date +%Y%m%d)")
 %global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
 %global srcdir %{_builddir}/simulationcraft-cli
 %global srcbuilddir %{srcdir}/build
