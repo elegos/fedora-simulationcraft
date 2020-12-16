@@ -43,7 +43,6 @@ popd
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
-export PREFIX="/usr"
 
 mkdir -p %{srcbuilddir}
 pushd %{srcbuilddir}
