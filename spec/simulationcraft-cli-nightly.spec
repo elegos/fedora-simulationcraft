@@ -16,6 +16,7 @@ URL:     %{projectUrl}
 
 BuildRequires: git
 BuildRequires: cmake
+BuildRequires: qt-devel
 BuildRequires: libcurl-devel
 BuildRequires: pkgconfig
 
