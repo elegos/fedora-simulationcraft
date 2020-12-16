@@ -62,6 +62,7 @@ popd
 %install
 # Variables
 outBinDir="%{buildroot}%{_bindir}"
+outAppsDir="%{buildroot}%{_datarootdir}/applications"
 outShareDir="%{buildroot}%{_datarootdir}/SimulationCraft/SimulationCraft"
 
 execFiles="qt/SimulationCraft"
@@ -69,6 +70,7 @@ guiFiles="Welcome.html Welcome.png"
 
 # Create output dirs
 install -v -d -m 0755 "${outBinDir}"
+install -v -d -m 0755 "${outAppsDir}"
 install -v -d -m 0755 "${outShareDir}"
 
 # Exec files
@@ -80,6 +82,12 @@ done
 for guiFile in $guiFiles ; do
   install -v -m 644 "%{srcbuilddir}/qt/${guiFile}" "${outShareDir}/${guiFile}"
 done
+
+# Desktop file
+install -v -m 644 "%{_sourcedir}/SimulationCraft.desktop" "${outAppsDir}/SimulationCraft.desktop"
+
+# Icon file
+install -v -m 644 "%{srcdir}/qt/icon/SimulationCraft.xpm" "${outShareDir}/SimulationCraft.xpm"
 
 find $RPM_BUILD_ROOT -not -type d -printf "%%%attr(%%m,root,root) %%p\n" | sed -e "s|$RPM_BUILD_ROOT||g" > %{_tmppath}/%{name}_contents.txt
 

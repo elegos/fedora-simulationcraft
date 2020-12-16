@@ -1,0 +1,1 @@
+../spec/simulationcraft-cli-nightly.spec

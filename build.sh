@@ -7,7 +7,8 @@ fi
 
 rpmdev-setuptree
 rm -rf ~/rpmbuild/SOURCES/*
-cp spec/*.patch ~/rpmbuild/SOURCES/
+cp patch/*.patch ~/rpmbuild/SOURCES/
+cp desktop/*.desktop ~/rpmbuild/SOURCES/
 
 set -e
 
