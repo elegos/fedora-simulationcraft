@@ -19,7 +19,7 @@ Patch0: gui-sc-to-install.patch
 BuildRequires: git
 BuildRequires: cmake
 BuildRequires: qt-devel
-BuildRequires: qt5-qtbase-devel
+BuildRequires: qt5-qtwebengine-devel
 BuildRequires: libcurl-devel
 BuildRequires: pkgconfig
 
