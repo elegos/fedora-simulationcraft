@@ -27,7 +27,7 @@ It is a multi-player event driven simulator written in C++ that models player ch
 %prep
 # Clone the sources
 if ! [ -d %{srcdir}/.git ]; then
-  git clone -depth 1 %{url}.git %{srcdir}
+  git clone --depth 1 %{url}.git %{srcdir}
 fi
 pushd %{srcdir}
 # Delete a possible previous build dir
