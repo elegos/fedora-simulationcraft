@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 675a39d..b5f6236 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,7 @@ project(simc)
+ 
+ # switch on/off different build targets
+ option(BUILD_GUI "Build the Qt gui along with cli binary" ON)
++option(SC_TO_INSTALL "Enable Linux install mode" OFF)
+ 
+ # disable various features that may be anvailable or unneeded
+ option(SC_NO_THREADING "Disable all dependencies on pthreads" OFF)
+@@ -44,6 +45,11 @@ else()
+     target_compile_options(engine PUBLIC -Wall -Wextra)
+ endif()
+ 
++# enable SC_TO_INSTALL mode
++if (SC_TO_INSTALL)
++    target_compile_definitions(engine PUBLIC SC_TO_INSTALL)
++endif()
++
+ # 'simc' command line interface target
+ include(source_files/cmake_engine_main.txt)
+ string(REGEX REPLACE "([^;]+)" "engine/\\1" source_files "${source_files}")

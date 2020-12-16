@@ -1,11 +1,11 @@
 %global projectUrl https://github.com/simulationcraft/simc
 %global version %(echo "$(date +%Y%m%d)")
 %global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
-%global srcdir %{_builddir}/simulationcraft-cli
+%global srcdir %{_builddir}/simulationcraft-gui
 %global srcbuilddir %{srcdir}/build
-%global outputDir %{_builddir}/simulationcraft-cli-%{version}-out
+%global outputDir %{_builddir}/simulationcraft-gui-%{version}-out
 
-Name:    simulationcraft-cli
+Name:    simulationcraft-gui
 Version: %{version}
 Release: 1%{dist}
 Summary: SimulationCraft is a tool to explore combat mechanics in the popular MMO RPG World of Warcraft (tm).
@@ -14,6 +14,8 @@ Group:   Amusements/Games/Tools
 License: GPLv3
 URL:     %{projectUrl}
 
+Patch0: gui-sc-to-install.patch
+
 BuildRequires: git
 BuildRequires: cmake
 BuildRequires: qt-devel
@@ -21,6 +23,8 @@ BuildRequires: libcurl-devel
 BuildRequires: pkgconfig
 
 Requires: libcurl
+Requires: simulationcraft-cli
+Requires: qt5-qtwebengine-devel
 
 %description
 It is a multi-player event driven simulator written in C++ that models player character damage-per-second in various raiding and dungeon scenarios.
@@ -31,13 +35,17 @@ if ! [ -d %{srcdir}/.git ]; then
   git clone --depth 1 %{url}.git %{srcdir}
 fi
 pushd %{srcdir}
-# Delete a possible previous build dir
-if [ -d "%{srcbuilddir}" ]; then
-  rm -rf build
-fi
-# Reset the git status
+  # Delete a possible previous build dir
+  if [ -d "%{srcbuilddir}" ]; then
+    rm -rf build
+  fi
+
+  # Reset the git status
   git reset --hard
   git fetch --all
+
+  # Apply patches
+  patch -p1 -i %{P:0}
 popd
 
 %build
@@ -47,45 +55,31 @@ export PREFIX="/usr"
 
 mkdir -p %{srcbuilddir}
 pushd %{srcbuilddir}
-  cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_GUI=OFF
+  cmake ../ -DCMAKE_BUILD_TYPE=Release -DSC_TO_INSTALL=1
   make -j$(cat /proc/cpuinfo|grep processor|wc -l)
 popd
 
 %install
 # Variables
 outBinDir="%{buildroot}%{_bindir}"
-outShareDir="%{buildroot}%{_datarootdir}/SimulationCraft"
-outShareProfilesDir="${outShareDir}/profiles"
-outShareDocsDir="${outShareDir}/docs"
+outShareDir="%{buildroot}%{_datarootdir}/SimulationCraft/SimulationCraft"
 
-execFiles="simc"
-profileDirs=$(cd "%{srcdir}/profiles" && find . -type d | sed -s 's/\.\///' | grep -v "\.")
-profileFiles=$(cd "%{srcdir}/profiles" && find . -type f | sed -s 's/\.\///')
+execFiles="qt/SimulationCraft"
+guiFiles="Welcome.html Welcome.png"
 
 # Create output dirs
 install -v -d -m 0755 "${outBinDir}"
 install -v -d -m 0755 "${outShareDir}"
-install -v -d -m 0755 "${outShareProfilesDir}"
-install -v -d -m 0755 "${outShareDocsDir}"
-
-install -v -d -m 0755 "${outShareProfilesDir}"
-for profileDir in $profileDirs ; do
-	install -v -d -m 0755 "${outShareProfilesDir}/$profileDir"
-done
 
 # Exec files
 for execFile in $execFiles ; do
 	install -v -m 0755 "%{srcbuilddir}/$execFile" "${outBinDir}"
 done
 
-# Profile files
-for profileFile in $profileFiles ; do
-	install -v -m 644 "%{srcdir}/profiles/${profileFile}" "${outShareProfilesDir}/${profileFile}"
+# GUI files
+for guiFile in $guiFiles ; do
+  install -v -m 644 "%{srcbuilddir}/qt/${guiFile}" "${outShareDir}/${guiFile}"
 done
-
-# Doc files
-install -v -m 644 "%{srcdir}/LICENSE" "${outShareDocsDir}/LICENSE"
-install -v -m 644 "%{srcdir}/README.md" "${outShareDocsDir}/README.md"
 
 find $RPM_BUILD_ROOT -not -type d -printf "%%%attr(%%m,root,root) %%p\n" | sed -e "s|$RPM_BUILD_ROOT||g" > %{_tmppath}/%{name}_contents.txt
 
