@@ -1,5 +1,5 @@
 %global projectUrl https://github.com/simulationcraft/simc
-%global version %(echo "$(git ls-remote %{projectUrl}.git | head -n 1 | awk '{ print $1 }' | cut -c1-7)")
+%global version %(echo "$(date +%Y-%m-%d)")
 %global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
 %global srcdir %{_builddir}/simulationcraft-cli
 %global srcbuilddir %{srcdir}/build
@@ -37,7 +37,6 @@ pushd %{srcdir}
 # Reset the git status
   git reset --hard
   git fetch --all
-  git checkout %{version}
 popd
 
 %build
