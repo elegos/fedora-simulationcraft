@@ -15,6 +15,7 @@ License: GPLv3
 URL:     %{projectUrl}
 
 Patch0: gui-sc-to-install.patch
+Source0: SimulationCraft.desktop
 
 BuildRequires: git
 BuildRequires: cmake
