@@ -1,0 +1,4 @@
+language: python
+python: "3.3"
+script: curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-cli/ &&
+        curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-gui/
