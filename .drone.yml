@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: deploy_on_pypi
+name: start_copr_build
 
 steps:
 - name: Start build
