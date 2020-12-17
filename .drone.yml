@@ -1,0 +1,19 @@
+---
+kind: pipeline
+type: docker
+name: deploy_on_pypi
+
+steps:
+- name: Start build
+  image: curlimages/curl:latest
+  when:
+    event:
+    - cron
+    cron:
+    - nightly
+  environment:
+    PACKAGEHASH:
+      from_secret: package_hash
+  commands:
+  - curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-cli/ 
+  - curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-gui/ 
