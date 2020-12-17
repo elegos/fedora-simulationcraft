@@ -1,4 +1,6 @@
-language: python
-python: "3.3"
-script: curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-cli/ &&
-        curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-gui/
+services:
+  - docker
+before_script:
+  - docker pull curlimages/curl
+script: docker run --rm curlimages/curl curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-cli/ &&
+        docker run --rm curlimages/curl curl -X POST https://copr.fedorainfracloud.org/webhooks/custom/37863/${PACKAGEHASH}/simulationcraft-gui/
