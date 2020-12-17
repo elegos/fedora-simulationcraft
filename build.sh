@@ -6,12 +6,11 @@ if [ "$1" != "" ]; then
 fi
 
 rpmdev-setuptree
-rm -rf ~/rpmbuild/SOURCES/*
-cp patch/*.patch ~/rpmbuild/SOURCES/
-cp desktop/*.desktop ~/rpmbuild/SOURCES/
 
 set -e
-
 for prj in $proj; do 
-  rpmbuild -ba spec/simulationcraft-${proj}-nightly.spec
+  rm -rf ~/rpmbuild/SOURCES/*
+  rm -rf ~/rpmbuild/BUILD/*
+  cp -rf simulationcraft-${proj}/* ~/rpmbuild/SOURCES/
+  rpmbuild -ba simulationcraft-${proj}/simulationcraft-${proj}-nightly.spec
 done

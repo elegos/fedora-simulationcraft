@@ -1,1 +1,0 @@
-../spec/simulationcraft-gui-nightly.spec
