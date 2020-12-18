@@ -14,7 +14,6 @@ Group:   Amusements/Games/Tools
 License: GPLv3
 URL:     %{projectUrl}
 
-Patch0: gui-sc-to-install.patch
 Source0: SimulationCraft.desktop
 
 BuildRequires: git
@@ -47,7 +46,7 @@ pushd %{srcdir}
   git fetch --all
 
   # Apply patches
-  patch -p1 -i %{P:0}
+  # patch -p1 -i %{P:0}
 popd
 
 %build
